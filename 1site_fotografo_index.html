@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DVD | Portfólio</title>
+    <link rel="stylesheet" href="css/estilo.css"> 
+    <link rel="stylesheet" href="css/responsivo.css">
+
+</head>
+<body>
+    
+    <header>
+    <div class="container">
+        <h1>DVD - David Alexandre</h1>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#portfolio">Portfólio</a></li>
+                <li><a href="#sobre">Sobre</a></li>
+                <li><a href="#contato">Contato</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <section id="home" class="hero">
+        <div class="container">
+            <h2>Momentos que falam por si</h2>
+            <p>Fotografia e filmagem profissional em alta definição</p>
+            <a href="#portfolio" class="btn">Ver Portfólio</a>
+        </div>
+    </section>
+
+    <section id="portfolio" class="portfolio">
+    <div class="container">
+        <h2>Portfólio</h2>
+        <div class="galeria">
+            
+            <div class="foto">
+                <img src="fotos/01.jpg" alt="Descrição da foto 01" loading="lazy">
+            </div>
+            
+            <div class="foto">
+                <img src="fotos/02.jpg" alt="Descrição da foto 02" loading="lazy">
+            </div>
+            
+            <div class="foto">
+                <img src="fotos/03.jpg" alt="Descrição da foto 03" loading="lazy">
+            </div>
+            
+            <div class="foto">
+                <img src="fotos/04.jpg" alt="Descrição da foto 04" loading="lazy">
+            </div>
+            
+            <div class="foto">
+                <img src="fotos/05.jpg" alt="Descrição da foto 05" loading="lazy">
+            </div>
+            
+            <div class="foto">
+                <img src="fotos/06.jpg" alt="Descrição da foto 06" loading="lazy">
+            </div>
+            
+        </div>
+    </div>
+</section>
+
+<section id="sobre" class="sobre">
+    <div class="container">
+        <div class="sobre-conteudo">
+            <div class="sobre-texto">
+                <h2>Sobre Mim</h2>
+                <p>
+                    Sou fotógrafo profissional há mais de 10 anos, especializado em 
+                    casamentos, ensaios e eventos. Cada clique é pensado para contar 
+                    uma história única e eternizar momentos que merecem ser lembrados.
+                </p>
+                <p>
+                    Trabalho com equipamentos de última geração e olhar atento aos 
+                    detalhes, garantindo imagens e vídeos em alta definição que 
+                    emocionam e encantam.
+                </p>
+            </div>
+            <div class="sobre-imagem">
+                <img src="fotos/fotografo.jpeg" alt="Foto do fotógrafo" loading="lazy">
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="contato" class="contato">
+    <div class="container">
+        <h2>Contato</h2>
+        <p>Vamos conversar? Preencha o formulário abaixo ou entre em contato diretamente.</p>
+        
+        <div class="contato-conteudo">
+            
+            <form class="formulario">
+                <div class="campo">
+                    <label for="nome">Nome</label>
+                    <input type="text" id="nome" name="nome" placeholder="Seu nome completo" required>
+                </div>
+                
+                <div class="campo">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" placeholder="seu@email.com" required>
+                </div>
+                
+                <div class="campo">
+                    <label for="telefone">Telefone / WhatsApp</label>
+                    <input type="tel" id="telefone" name="telefone" placeholder="(11) 99999-9999">
+                </div>
+                
+                <div class="campo">
+                    <label for="mensagem">Mensagem</label>
+                    <textarea id="mensagem" name="mensagem" rows="5" placeholder="Escreva sua mensagem..." required></textarea>
+                </div>
+                
+                <button type="submit" class="btn">Enviar Mensagem</button>
+            </form>
+            
+            <div class="contato-info">
+                <h3>Informações de Contato</h3>
+                <p>📧 email@fotografo.com.br</p>
+                <p>📱 (11) 99999-9999</p>
+                <p>📍 São Paulo - SP</p>
+                <p>📷 Instagram: @fotografo</p>
+            </div>
+            
+        </div>
+    </div>
+</section>
+</main>
+
+<footer>
+    <div class="container">
+        <div class="footer-conteudo">
+            
+            <div class="footer-marca">
+                <h3>Nome do Fotógrafo</h3>
+                <p>Momentos que falam por si</p>
+            </div>
+            
+            <div class="footer-links">
+                <h4>Navegação</h4>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#portfolio">Portfólio</a></li>
+                    <li><a href="#sobre">Sobre</a></li>
+                    <li><a href="#contato">Contato</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-social">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="#">📷 Instagram</a></li>
+                    <li><a href="#">📘 Facebook</a></li>
+                    <li><a href="#">🎬 YouTube</a></li>
+                </ul>
+            </div>
+            
+        </div>
+        
+        <div class="footer-copy">
+            <p>&copy; 2026 Nome do Fotógrafo. Todos os direitos reservados.</p>
+        </div>
+    </div>
+</footer>
+<script src="js/script.js"></script>
+<script src="js/site.js"></script>
+</body>
+</html>
