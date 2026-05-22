@@ -172,8 +172,8 @@ function carregarVideos() {
     });
 }
 
-// Adicionar vídeo
-formVideo.addEventListener('submit', function(e) {
+    // Adicionar vídeo
+    formVideo.addEventListener('submit', function(e) {
     e.preventDefault();
     
     const url = document.getElementById('video-url').value.trim();
@@ -193,15 +193,58 @@ formVideo.addEventListener('submit', function(e) {
     });
 });
 
-// Remover vídeo
-function removerVideo(id) {
+    // Remover vídeo
+    function removerVideo(id) {
     db.collection('videos').doc(id).delete().then(function() {
         carregarVideos();
     });
 }
+     /* ========== ALTERAR SENHA ========== */
 
-/* ========== INICIALIZAR ========== */
+     const formSenha = document.querySelector('.form-senha');
+     const mensagemSenha = document.querySelector('.mensagem-senha');
 
-carregarFotos();
-carregarTextos();
-carregarVideos();
+     formSenha.addEventListener('submit', function(e) {
+     e.preventDefault();
+    
+     const senhaAtual = document.getElementById('senha-atual').value;
+     const senhaNova = document.getElementById('senha-nova').value;
+     const senhaConfirmar = document.getElementById('senha-confirmar').value;
+    
+     if (senhaNova !== senhaConfirmar) {
+        mensagemSenha.textContent = 'As senhas não coincidem.';
+        mensagemSenha.style.color = '#dc3545';
+        return;
+    }
+    
+    if (senhaNova.length < 4) {
+        mensagemSenha.textContent = 'A senha deve ter no mínimo 4 caracteres.';
+        mensagemSenha.style.color = '#dc3545';
+        return;
+    }
+    
+    // Buscar senha atual no Firebase
+    db.collection('config').doc('senha').get().then(function(doc) {
+        const senhaCorreta = doc.exists ? doc.data().valor : 'dvd2026';
+        
+        if (senhaAtual !== senhaCorreta) {
+            mensagemSenha.textContent = 'Senha atual incorreta.';
+            mensagemSenha.style.color = '#dc3545';
+            return;
+        }
+        
+        // Salvar nova senha
+        db.collection('config').doc('senha').set({
+            valor: senhaNova
+        }).then(function() {
+            mensagemSenha.textContent = 'Senha alterada com sucesso!';
+            mensagemSenha.style.color = '#28a745';
+            formSenha.reset();
+        });
+    });
+});
+    /* ========== INICIALIZAR ========== */
+
+    carregarFotos();
+    carregarTextos();
+    carregarVideos();

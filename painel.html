@@ -20,6 +20,7 @@
             <button class="aba ativa" data-aba="fotos">📷 Fotos</button>
             <button class="aba" data-aba="textos">📝 Textos</button>
             <button class="aba" data-aba="videos">🎬 Vídeos</button>
+            <button class="aba" data-aba="senha">🔒 Senha</button>
         </div>
 
         <!-- Aba Fotos -->
@@ -103,7 +104,29 @@
                 <!-- Vídeos carregados via JavaScript -->
             </div>
         </section>
-
+      
+        <!-- Aba Senha -->
+        <section id="aba-senha" class="conteudo-aba">
+        <h2>Alterar Senha</h2>
+    
+        <form class="form-senha">
+        <div class="campo">
+            <label for="senha-atual">Senha Atual</label>
+            <input type="password" id="senha-atual" placeholder="Digite a senha atual" required>
+        </div>
+        <div class="campo">
+            <label for="senha-nova">Nova Senha</label>
+            <input type="password" id="senha-nova" placeholder="Digite a nova senha" required minlength="4">
+        </div>
+        <div class="campo">
+            <label for="senha-confirmar">Confirmar Nova Senha</label>
+            <input type="password" id="senha-confirmar" placeholder="Confirme a nova senha" required>
+        </div>
+        <button type="submit" class="btn">Alterar Senha</button>
+    </form>
+    
+    <div class="mensagem-senha" style="margin-top: 15px; font-size: 0.9rem;"></div>
+</section>
     </main>
 
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
