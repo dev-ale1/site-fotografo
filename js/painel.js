@@ -1,6 +1,20 @@
-/* ========== PAINEL DE CONTROLE ========== */
+/* ========== FIREBASE CONFIG ========== */
 
-// Verificar se está logado
+const firebaseConfig = {
+    apiKey: "AIzaSyCyCAnwUkUUoTuYg_W4qDoGHfAvfSNAgZ0", /* "SUA_APIKEY_AQUI",*/
+    authDomain: "site-fotografo-dvd.firebaseapp.com",
+    projectId: "site-fotografo-dvd",
+    storageBucket: "site-fotografo-dvd.firebasestorage.app",
+    messagingSenderId: "611194350005",
+    appId: "1:611194350005:web:c513fa0cb4dd8624fd51fc"
+};
+
+// Inicializar Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+/* ========== VERIFICAR LOGIN ========== */
+
 if (localStorage.getItem('logado') !== 'true') {
     window.location.href = 'admin.html';
 }
@@ -12,15 +26,9 @@ const conteudos = document.querySelectorAll('.conteudo-aba');
 
 abas.forEach(function(aba) {
     aba.addEventListener('click', function() {
-        // Remover ativo de todas as abas
-        abas.forEach(function(a) {
-            a.classList.remove('ativa');
-        });
-        conteudos.forEach(function(c) {
-            c.classList.remove('ativo');
-        });
+        abas.forEach(function(a) { a.classList.remove('ativa'); });
+        conteudos.forEach(function(c) { c.classList.remove('ativo'); });
         
-        // Ativar a aba clicada
         this.classList.add('ativa');
         const alvo = this.getAttribute('data-aba');
         document.getElementById('aba-' + alvo).classList.add('ativo');
@@ -39,26 +47,28 @@ document.getElementById('btn-sair').addEventListener('click', function() {
 const formFoto = document.querySelector('.form-foto');
 const gridFotos = document.getElementById('grid-fotos');
 
-// Carregar fotos salvas
+// Carregar fotos do Firestore
 function carregarFotos() {
-    const fotos = JSON.parse(localStorage.getItem('fotos')) || [];
-    gridFotos.innerHTML = '';
-    
-    fotos.forEach(function(foto, index) {
-        const div = document.createElement('div');
-        div.classList.add('foto-item');
-        div.innerHTML = `
-            <img src="${foto.url}" alt="${foto.descricao}">
-            <button class="btn-remover" data-index="${index}">&times;</button>
-        `;
-        gridFotos.appendChild(div);
-    });
-    
-    // Eventos de remover
-    document.querySelectorAll('.btn-remover').forEach(function(btn) {
-        btn.addEventListener('click', function() {
-            const index = this.getAttribute('data-index');
-            removerFoto(index);
+    db.collection('fotos').get().then(function(snapshot) {
+        gridFotos.innerHTML = '';
+        
+        snapshot.forEach(function(doc) {
+            const foto = doc.data();
+            const div = document.createElement('div');
+            div.classList.add('foto-item');
+            div.innerHTML = `
+                <img src="${foto.url}" alt="${foto.descricao}">
+                <button class="btn-remover" data-id="${doc.id}">&times;</button>
+            `;
+            gridFotos.appendChild(div);
+        });
+        
+        // Eventos de remover
+        document.querySelectorAll('.btn-remover').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                const id = this.getAttribute('data-id');
+                removerFoto(id);
+            });
         });
     });
 }
@@ -75,43 +85,43 @@ formFoto.addEventListener('submit', function(e) {
         return;
     }
     
-    // Converter imagem para Base64 (armazenamento local)
     const leitor = new FileReader();
     leitor.onload = function(evento) {
-        const fotos = JSON.parse(localStorage.getItem('fotos')) || [];
-        fotos.push({
+        db.collection('fotos').add({
             url: evento.target.result,
             descricao: descricao
+        }).then(function() {
+            carregarFotos();
+            formFoto.reset();
         });
-        localStorage.setItem('fotos', JSON.stringify(fotos));
-        carregarFotos();
-        formFoto.reset();
     };
     leitor.readAsDataURL(arquivo);
 });
 
 // Remover foto
-function removerFoto(index) {
-    const fotos = JSON.parse(localStorage.getItem('fotos')) || [];
-    fotos.splice(index, 1);
-    localStorage.setItem('fotos', JSON.stringify(fotos));
-    carregarFotos();
+function removerFoto(id) {
+    db.collection('fotos').doc(id).delete().then(function() {
+        carregarFotos();
+    });
 }
 
 /* ========== GERENCIAR TEXTOS ========== */
 
 const formTextos = document.querySelector('.form-textos');
 
-// Carregar textos salvos
+// Carregar textos do Firestore
 function carregarTextos() {
-    const textos = JSON.parse(localStorage.getItem('textos')) || {};
-    
-    document.getElementById('texto-hero-titulo').value = textos.heroTitulo || '';
-    document.getElementById('texto-hero-paragrafo').value = textos.heroParagrafo || '';
-    document.getElementById('texto-sobre').value = textos.sobre || '';
-    document.getElementById('texto-email').value = textos.email || '';
-    document.getElementById('texto-telefone').value = textos.telefone || '';
-    document.getElementById('texto-instagram').value = textos.instagram || '';
+    db.collection('textos').doc('site').get().then(function(doc) {
+        if (doc.exists) {
+            const textos = doc.data();
+            document.getElementById('texto-hero-titulo').value = textos.heroTitulo || '';
+            document.getElementById('texto-hero-paragrafo').value = textos.heroParagrafo || '';
+            document.getElementById('texto-sobre').value = textos.sobre || '';
+            document.getElementById('texto-email').value = textos.email || '';
+            document.getElementById('texto-telefone').value = textos.telefone || '';
+            document.getElementById('texto-instagram').value = textos.instagram || '';
+        }
+    });
 }
 
 // Salvar textos
@@ -127,8 +137,9 @@ formTextos.addEventListener('submit', function(e) {
         instagram: document.getElementById('texto-instagram').value
     };
     
-    localStorage.setItem('textos', JSON.stringify(textos));
-    alert('Textos salvos com sucesso!');
+    db.collection('textos').doc('site').set(textos).then(function() {
+        alert('Textos salvos com sucesso!');
+    });
 });
 
 /* ========== GERENCIAR VÍDEOS ========== */
@@ -136,25 +147,27 @@ formTextos.addEventListener('submit', function(e) {
 const formVideo = document.querySelector('.form-video');
 const listaVideos = document.getElementById('lista-videos');
 
-// Carregar vídeos salvos
+// Carregar vídeos do Firestore
 function carregarVideos() {
-    const videos = JSON.parse(localStorage.getItem('videos')) || [];
-    listaVideos.innerHTML = '';
-    
-    videos.forEach(function(video, index) {
-        const div = document.createElement('div');
-        div.classList.add('video-item');
-        div.innerHTML = `
-            <span>${video.titulo}</span>
-            <button class="btn-remover-video" data-index="${index}">Remover</button>
-        `;
-        listaVideos.appendChild(div);
-    });
-    
-    document.querySelectorAll('.btn-remover-video').forEach(function(btn) {
-        btn.addEventListener('click', function() {
-            const index = this.getAttribute('data-index');
-            removerVideo(index);
+    db.collection('videos').get().then(function(snapshot) {
+        listaVideos.innerHTML = '';
+        
+        snapshot.forEach(function(doc) {
+            const video = doc.data();
+            const div = document.createElement('div');
+            div.classList.add('video-item');
+            div.innerHTML = `
+                <span>${video.titulo}</span>
+                <button class="btn-remover-video" data-id="${doc.id}">Remover</button>
+            `;
+            listaVideos.appendChild(div);
+        });
+        
+        document.querySelectorAll('.btn-remover-video').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                const id = this.getAttribute('data-id');
+                removerVideo(id);
+            });
         });
     });
 }
@@ -171,19 +184,20 @@ formVideo.addEventListener('submit', function(e) {
         return;
     }
     
-    const videos = JSON.parse(localStorage.getItem('videos')) || [];
-    videos.push({ url: url, titulo: titulo });
-    localStorage.setItem('videos', JSON.stringify(videos));
-    carregarVideos();
-    formVideo.reset();
+    db.collection('videos').add({
+        url: url,
+        titulo: titulo
+    }).then(function() {
+        carregarVideos();
+        formVideo.reset();
+    });
 });
 
 // Remover vídeo
-function removerVideo(index) {
-    const videos = JSON.parse(localStorage.getItem('videos')) || [];
-    videos.splice(index, 1);
-    localStorage.setItem('videos', JSON.stringify(videos));
-    carregarVideos();
+function removerVideo(id) {
+    db.collection('videos').doc(id).delete().then(function() {
+        carregarVideos();
+    });
 }
 
 /* ========== INICIALIZAR ========== */
