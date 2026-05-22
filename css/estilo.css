@@ -61,6 +61,12 @@ header h1 {
     letter-spacing: 1px;
 }
 
+header h1 img {
+    height: 45px;
+    width: auto;
+    vertical-align: middle;
+}
+
 header nav ul {
     display: flex;
     gap: 30px;
