@@ -113,23 +113,55 @@ formFoto.addEventListener('submit', function(e) {
         return;
     }
     
-    const leitor = new FileReader();
-    leitor.onload = function(evento) {
+    // Redimensionar imagem antes de salvar
+    redimensionarImagem(arquivo, 1200, function(imagemReduzida) {
         db.collection('fotos').add({
-            url: evento.target.result,
+            url: imagemReduzida,
             descricao: descricao
         }).then(function() {
             carregarFotos();
             formFoto.reset();
+        }).catch(function(error) {
+            alert('Erro ao salvar: ' + error.message);
         });
-    };
-    leitor.readAsDataURL(arquivo);
+    });
 });
 
 function removerFoto(id) {
     db.collection('fotos').doc(id).delete().then(function() {
         carregarFotos();
     });
+}
+
+// Função para redimensionar imagem
+function redimensionarImagem(arquivo, larguraMaxima, callback) {
+    const leitor = new FileReader();
+    
+    leitor.onload = function(evento) {
+        const img = new Image();
+        
+        img.onload = function() {
+            // Calcular nova altura proporcional
+            const proporcao = larguraMaxima / img.width;
+            const novaAltura = img.height * proporcao;
+            
+            // Criar canvas para redimensionar
+            const canvas = document.createElement('canvas');
+            canvas.width = larguraMaxima;
+            canvas.height = novaAltura;
+            
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, larguraMaxima, novaAltura);
+            
+            // Converter para JPEG com qualidade 0.8 (80%)
+            const imagemReduzida = canvas.toDataURL('image/jpeg', 0.8);
+            callback(imagemReduzida);
+        };
+        
+        img.src = evento.target.result;
+    };
+    
+    leitor.readAsDataURL(arquivo);
 }
 
 /* ========== GERENCIAR TEXTOS ========== */
