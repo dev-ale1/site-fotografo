@@ -30,7 +30,6 @@
             <div class="upload-area">
                 <h3>Adicionar nova foto</h3>
                 <form class="form-foto">
-
                     <div class="campo">
                         <label for="imagem">Selecionar imagem</label>
                         <input type="file" id="imagem" accept="image/*" required>
@@ -105,6 +104,18 @@
         <!-- Aba Senha -->
         <section id="aba-senha" class="conteudo-aba">
             <h2>Alterar Senha</h2>
+            
+            <form class="form-senha">
+                <div class="campo">
+                    <label for="senha-nova">Nova Senha</label>
+                    <input type="password" id="senha-nova" placeholder="Digite a nova senha" required minlength="6">
+                </div>
+                <div class="campo">
+                    <label for="senha-confirmar">Confirmar Nova Senha</label>
+                    <input type="password" id="senha-confirmar" placeholder="Confirme a nova senha" required>
+                </div>
+                <button type="submit" class="btn">Alterar Senha</button>
+            </form>
             
             <div class="mensagem-senha" style="margin-top: 15px; font-size: 0.9rem;"></div>
         </section>
