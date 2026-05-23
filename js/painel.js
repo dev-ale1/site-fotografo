@@ -32,14 +32,36 @@ auth.onAuthStateChanged(function(user) {
 const abas = document.querySelectorAll('.aba');
 const conteudos = document.querySelectorAll('.conteudo-aba');
 
+// Esconder todas as seções (exceto a primeira)
+conteudos.forEach(function(c, index) {
+    if (index !== 0) {
+        c.style.display = 'none';
+    } else {
+        c.style.display = 'block';
+    }
+});
+
 abas.forEach(function(aba) {
     aba.addEventListener('click', function() {
-        abas.forEach(function(a) { a.classList.remove('ativa'); });
-        conteudos.forEach(function(c) { c.classList.remove('ativo'); });
+        // Esconder todas as seções
+        conteudos.forEach(function(c) {
+            c.style.display = 'none';
+        });
         
+        // Remover ativo de todas as abas
+        abas.forEach(function(a) {
+            a.classList.remove('ativa');
+        });
+        
+        // Ativar aba clicada
         this.classList.add('ativa');
+        
+        // Mostrar seção correspondente
         const alvo = this.getAttribute('data-aba');
-        document.getElementById('aba-' + alvo).classList.add('ativo');
+        const secao = document.getElementById('aba-' + alvo);
+        if (secao) {
+            secao.style.display = 'block';
+        }
     });
 });
 
