@@ -79,25 +79,25 @@ document.addEventListener('keydown', function(e) {
 const formulario = document.querySelector('.formulario');
 
 formulario.addEventListener('submit', function(e) {
-    e.preventDefault();
-    
+    // Validar antes de enviar
     const nome = document.getElementById('nome').value.trim();
     const email = document.getElementById('email').value.trim();
-    const telefone = document.getElementById('telefone').value.trim();
     const mensagem = document.getElementById('mensagem').value.trim();
     
     if (nome === '' || email === '' || mensagem === '') {
+        e.preventDefault();
         mostrarMensagem('Por favor, preencha todos os campos obrigatórios.', 'erro');
         return;
     }
     
     if (!validarEmail(email)) {
+        e.preventDefault();
         mostrarMensagem('Por favor, insira um e-mail válido.', 'erro');
         return;
     }
     
+    // Se passou, deixa enviar para o Formspree
     mostrarMensagem('Mensagem enviada com sucesso! Em breve entraremos em contato.', 'sucesso');
-    formulario.reset();
 });
 
 function validarEmail(email) {
