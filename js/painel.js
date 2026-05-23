@@ -19,6 +19,11 @@ const auth = firebase.auth();
 auth.onAuthStateChanged(function(user) {
     if (!user) {
         window.location.href = 'admin.html';
+    } else {
+        // Só carrega os dados depois de confirmar o login
+        carregarFotos();
+        carregarTextos();
+        carregarVideos();
     }
 });
 
@@ -229,9 +234,3 @@ formSenha.addEventListener('submit', function(e) {
         mensagemSenha.style.color = '#dc3545';
     });
 });
-
-/* ========== INICIALIZAR ========== */
-
-carregarFotos();
-carregarTextos();
-carregarVideos();
