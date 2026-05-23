@@ -1,7 +1,7 @@
 /* ========== FIREBASE CONFIG ========== */
 
 const firebaseConfig = {
-    apiKey: "AIzaSyCyCAnwUkUUoTuYg_W4qDoGHfAvfSNAgZ0", /* "SUA_APIKEY_AQUI",*/
+    apiKey: "AIzaSyCyCAnwUkUUoTuYg_W4qDoGHfAvfSNAgZ0",
     authDomain: "site-fotografo-dvd.firebaseapp.com",
     projectId: "site-fotografo-dvd",
     storageBucket: "site-fotografo-dvd.firebasestorage.app",
@@ -12,12 +12,15 @@ const firebaseConfig = {
 // Inicializar Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
+const auth = firebase.auth();
 
 /* ========== VERIFICAR LOGIN ========== */
 
-if (localStorage.getItem('logado') !== 'true') {
-    window.location.href = 'admin.html';
-}
+auth.onAuthStateChanged(function(user) {
+    if (!user) {
+        window.location.href = 'admin.html';
+    }
+});
 
 /* ========== ABAS ========== */
 
@@ -38,8 +41,9 @@ abas.forEach(function(aba) {
 /* ========== BOTÃO SAIR ========== */
 
 document.getElementById('btn-sair').addEventListener('click', function() {
-    localStorage.removeItem('logado');
-    window.location.href = 'admin.html';
+    auth.signOut().then(function() {
+        window.location.href = 'admin.html';
+    });
 });
 
 /* ========== GERENCIAR FOTOS ========== */
@@ -47,7 +51,6 @@ document.getElementById('btn-sair').addEventListener('click', function() {
 const formFoto = document.querySelector('.form-foto');
 const gridFotos = document.getElementById('grid-fotos');
 
-// Carregar fotos do Firestore
 function carregarFotos() {
     db.collection('fotos').get().then(function(snapshot) {
         gridFotos.innerHTML = '';
@@ -63,7 +66,6 @@ function carregarFotos() {
             gridFotos.appendChild(div);
         });
         
-        // Eventos de remover
         document.querySelectorAll('.btn-remover').forEach(function(btn) {
             btn.addEventListener('click', function() {
                 const id = this.getAttribute('data-id');
@@ -73,7 +75,6 @@ function carregarFotos() {
     });
 }
 
-// Adicionar foto
 formFoto.addEventListener('submit', function(e) {
     e.preventDefault();
     
@@ -98,7 +99,6 @@ formFoto.addEventListener('submit', function(e) {
     leitor.readAsDataURL(arquivo);
 });
 
-// Remover foto
 function removerFoto(id) {
     db.collection('fotos').doc(id).delete().then(function() {
         carregarFotos();
@@ -109,7 +109,6 @@ function removerFoto(id) {
 
 const formTextos = document.querySelector('.form-textos');
 
-// Carregar textos do Firestore
 function carregarTextos() {
     db.collection('textos').doc('site').get().then(function(doc) {
         if (doc.exists) {
@@ -124,7 +123,6 @@ function carregarTextos() {
     });
 }
 
-// Salvar textos
 formTextos.addEventListener('submit', function(e) {
     e.preventDefault();
     
@@ -147,7 +145,6 @@ formTextos.addEventListener('submit', function(e) {
 const formVideo = document.querySelector('.form-video');
 const listaVideos = document.getElementById('lista-videos');
 
-// Carregar vídeos do Firestore
 function carregarVideos() {
     db.collection('videos').get().then(function(snapshot) {
         listaVideos.innerHTML = '';
@@ -172,8 +169,7 @@ function carregarVideos() {
     });
 }
 
-    // Adicionar vídeo
-    formVideo.addEventListener('submit', function(e) {
+formVideo.addEventListener('submit', function(e) {
     e.preventDefault();
     
     const url = document.getElementById('video-url').value.trim();
@@ -193,58 +189,49 @@ function carregarVideos() {
     });
 });
 
-    // Remover vídeo
-    function removerVideo(id) {
+function removerVideo(id) {
     db.collection('videos').doc(id).delete().then(function() {
         carregarVideos();
     });
 }
-     /* ========== ALTERAR SENHA ========== */
 
-     const formSenha = document.querySelector('.form-senha');
-     const mensagemSenha = document.querySelector('.mensagem-senha');
+/* ========== ALTERAR SENHA ========== */
 
-     formSenha.addEventListener('submit', function(e) {
-     e.preventDefault();
+const formSenha = document.querySelector('.form-senha');
+const mensagemSenha = document.querySelector('.mensagem-senha');
+
+formSenha.addEventListener('submit', function(e) {
+    e.preventDefault();
     
-     const senhaAtual = document.getElementById('senha-atual').value;
-     const senhaNova = document.getElementById('senha-nova').value;
-     const senhaConfirmar = document.getElementById('senha-confirmar').value;
+    const senhaNova = document.getElementById('senha-nova').value;
+    const senhaConfirmar = document.getElementById('senha-confirmar').value;
     
-     if (senhaNova !== senhaConfirmar) {
+    if (senhaNova !== senhaConfirmar) {
         mensagemSenha.textContent = 'As senhas não coincidem.';
         mensagemSenha.style.color = '#dc3545';
         return;
     }
     
-    if (senhaNova.length < 4) {
-        mensagemSenha.textContent = 'A senha deve ter no mínimo 4 caracteres.';
+    if (senhaNova.length < 6) {
+        mensagemSenha.textContent = 'A senha deve ter no mínimo 6 caracteres.';
         mensagemSenha.style.color = '#dc3545';
         return;
     }
     
-    // Buscar senha atual no Firebase
-    db.collection('config').doc('senha').get().then(function(doc) {
-        const senhaCorreta = doc.exists ? doc.data().valor : 'dvd2026';
-        
-        if (senhaAtual !== senhaCorreta) {
-            mensagemSenha.textContent = 'Senha atual incorreta.';
-            mensagemSenha.style.color = '#dc3545';
-            return;
-        }
-        
-        // Salvar nova senha
-        db.collection('config').doc('senha').set({
-            valor: senhaNova
-        }).then(function() {
-            mensagemSenha.textContent = 'Senha alterada com sucesso!';
-            mensagemSenha.style.color = '#28a745';
-            formSenha.reset();
-        });
+    const user = auth.currentUser;
+    
+    user.updatePassword(senhaNova).then(function() {
+        mensagemSenha.textContent = 'Senha alterada com sucesso!';
+        mensagemSenha.style.color = '#28a745';
+        formSenha.reset();
+    }).catch(function(error) {
+        mensagemSenha.textContent = 'Erro: faça login novamente antes de alterar a senha.';
+        mensagemSenha.style.color = '#dc3545';
     });
 });
-    /* ========== INICIALIZAR ========== */
 
-    carregarFotos();
-    carregarTextos();
-    carregarVideos();
+/* ========== INICIALIZAR ========== */
+
+carregarFotos();
+carregarTextos();
+carregarVideos();

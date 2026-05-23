@@ -10,9 +10,13 @@
     
     <div class="login-box">
         <h1>Área Restrita</h1>
-        <p>Digite a senha para acessar o painel</p>
+        <p>Digite seu e-mail e senha para acessar o painel</p>
         
         <form class="login-form">
+            <div class="campo">
+                <label for="email">E-mail</label>
+                <input type="email" id="email" name="email" placeholder="seu@email.com" required>
+            </div>
             <div class="campo">
                 <label for="senha">Senha</label>
                 <input type="password" id="senha" name="senha" placeholder="Digite a senha" required>
@@ -26,6 +30,7 @@
 
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="js/admin.js"></script>
 </body>
 </html>

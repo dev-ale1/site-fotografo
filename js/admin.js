@@ -10,41 +10,38 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+const auth = firebase.auth();
 
 /* ========== LOGIN ========== */
 
 const loginForm = document.querySelector('.login-form');
 const mensagem = document.querySelector('.mensagem-login');
 
-// Buscar senha salva no Firebase
-db.collection('config').doc('senha').get().then(function(doc) {
-    const senhaCorreta = doc.exists ? doc.data().valor : 'dvd2026';
+loginForm.addEventListener('submit', function(e) {
+    e.preventDefault();
     
-    loginForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const senha = document.getElementById('senha').value;
-        
-        if (senha === senhaCorreta) {
+    const email = document.getElementById('email').value;
+    const senha = document.getElementById('senha').value;
+    
+    auth.signInWithEmailAndPassword(email, senha)
+        .then(function() {
             mensagem.textContent = 'Acesso liberado! Redirecionando...';
             mensagem.className = 'mensagem-login sucesso';
-            
-            localStorage.setItem('logado', 'true');
             
             setTimeout(function() {
                 window.location.href = 'painel.html';
             }, 1000);
-            
-        } else {
-            mensagem.textContent = 'Senha incorreta. Tente novamente.';
+        })
+        .catch(function(error) {
+            mensagem.textContent = 'E-mail ou senha incorretos.';
             mensagem.className = 'mensagem-login erro';
             document.getElementById('senha').value = '';
-        }
-    });
+        });
 });
 
 // Se já estiver logado, redireciona
-if (localStorage.getItem('logado') === 'true') {
-    window.location.href = 'painel.html';
-}
+auth.onAuthStateChanged(function(user) {
+    if (user && window.location.pathname.includes('admin.html')) {
+        window.location.href = 'painel.html';
+    }
+});

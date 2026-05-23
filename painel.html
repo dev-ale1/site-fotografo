@@ -30,6 +30,7 @@
             <div class="upload-area">
                 <h3>Adicionar nova foto</h3>
                 <form class="form-foto">
+
                     <div class="campo">
                         <label for="imagem">Selecionar imagem</label>
                         <input type="file" id="imagem" accept="image/*" required>
@@ -44,9 +45,7 @@
             
             <div class="lista-fotos">
                 <h3>Fotos atuais</h3>
-                <div class="grid-fotos" id="grid-fotos">
-                    <!-- Fotos carregadas via JavaScript -->
-                </div>
+                <div class="grid-fotos" id="grid-fotos"></div>
             </div>
         </section>
 
@@ -100,38 +99,21 @@
                 <button type="submit" class="btn">Adicionar Vídeo</button>
             </form>
             
-            <div class="lista-videos" id="lista-videos">
-                <!-- Vídeos carregados via JavaScript -->
-            </div>
+            <div class="lista-videos" id="lista-videos"></div>
         </section>
-      
+
         <!-- Aba Senha -->
         <section id="aba-senha" class="conteudo-aba">
-        <h2>Alterar Senha</h2>
-    
-        <form class="form-senha">
-        <div class="campo">
-            <label for="senha-atual">Senha Atual</label>
-            <input type="password" id="senha-atual" placeholder="Digite a senha atual" required>
-        </div>
-        <div class="campo">
-            <label for="senha-nova">Nova Senha</label>
-            <input type="password" id="senha-nova" placeholder="Digite a nova senha" required minlength="4">
-        </div>
-        <div class="campo">
-            <label for="senha-confirmar">Confirmar Nova Senha</label>
-            <input type="password" id="senha-confirmar" placeholder="Confirme a nova senha" required>
-        </div>
-        <button type="submit" class="btn">Alterar Senha</button>
-    </form>
-    
-    <div class="mensagem-senha" style="margin-top: 15px; font-size: 0.9rem;"></div>
-</section>
+            <h2>Alterar Senha</h2>
+            
+            <div class="mensagem-senha" style="margin-top: 15px; font-size: 0.9rem;"></div>
+        </section>
+        
     </main>
 
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="js/painel.js"></script>
-</body>
 </body>
 </html>
