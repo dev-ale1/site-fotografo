@@ -203,34 +203,37 @@ function removerVideo(id) {
 /* ========== ALTERAR SENHA ========== */
 
 const formSenha = document.querySelector('.form-senha');
-const mensagemSenha = document.querySelector('.mensagem-senha');
 
-formSenha.addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const senhaNova = document.getElementById('senha-nova').value;
-    const senhaConfirmar = document.getElementById('senha-confirmar').value;
-    
-    if (senhaNova !== senhaConfirmar) {
-        mensagemSenha.textContent = 'As senhas não coincidem.';
-        mensagemSenha.style.color = '#dc3545';
-        return;
-    }
-    
-    if (senhaNova.length < 6) {
-        mensagemSenha.textContent = 'A senha deve ter no mínimo 6 caracteres.';
-        mensagemSenha.style.color = '#dc3545';
-        return;
-    }
-    
-    const user = auth.currentUser;
-    
-    user.updatePassword(senhaNova).then(function() {
-        mensagemSenha.textContent = 'Senha alterada com sucesso!';
-        mensagemSenha.style.color = '#28a745';
-        formSenha.reset();
-    }).catch(function(error) {
-        mensagemSenha.textContent = 'Erro: faça login novamente antes de alterar a senha.';
-        mensagemSenha.style.color = '#dc3545';
+if (formSenha) {
+    const mensagemSenha = document.querySelector('.mensagem-senha');
+
+    formSenha.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const senhaNova = document.getElementById('senha-nova').value;
+        const senhaConfirmar = document.getElementById('senha-confirmar').value;
+        
+        if (senhaNova !== senhaConfirmar) {
+            mensagemSenha.textContent = 'As senhas não coincidem.';
+            mensagemSenha.style.color = '#dc3545';
+            return;
+        }
+        
+        if (senhaNova.length < 6) {
+            mensagemSenha.textContent = 'A senha deve ter no mínimo 6 caracteres.';
+            mensagemSenha.style.color = '#dc3545';
+            return;
+        }
+        
+        const user = auth.currentUser;
+        
+        user.updatePassword(senhaNova).then(function() {
+            mensagemSenha.textContent = 'Senha alterada com sucesso!';
+            mensagemSenha.style.color = '#28a745';
+            formSenha.reset();
+        }).catch(function(error) {
+            mensagemSenha.textContent = 'Erro: faça login novamente antes de alterar a senha.';
+            mensagemSenha.style.color = '#dc3545';
+        });
     });
-});
+}
