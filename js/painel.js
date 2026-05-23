@@ -154,7 +154,7 @@ function redimensionarImagem(arquivo, larguraMaxima, callback) {
             ctx.drawImage(img, 0, 0, larguraMaxima, novaAltura);
             
             // Converter para JPEG com qualidade 0.8 (80%)
-            const imagemReduzida = canvas.toDataURL('image/jpeg', 0.8);
+            const imagemReduzida = canvas.toDataURL('image/jpeg', 0.6);
             callback(imagemReduzida);
         };
         
