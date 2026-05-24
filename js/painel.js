@@ -24,6 +24,8 @@ auth.onAuthStateChanged(function(user) {
         carregarFotos();
         carregarTextos();
         carregarVideos();
+        carregarLixeira();
+
     }
 });
 
@@ -128,11 +130,23 @@ formFoto.addEventListener('submit', function(e) {
 });
 
 function removerFoto(id) {
-    db.collection('fotos').doc(id).delete().then(function() {
-        carregarFotos();
+    // Buscar a foto antes de excluir
+    db.collection('fotos').doc(id).get().then(function(doc) {
+        if (doc.exists) {
+            const foto = doc.data();
+            foto.excluidaEm = new Date().toISOString();
+            
+            // Mover para lixeira
+            db.collection('lixeira').add(foto).then(function() {
+                // Excluir da coleção fotos
+                db.collection('fotos').doc(id).delete().then(function() {
+                    carregarFotos();
+                    carregarLixeira();
+                });
+            });
+        }
     });
 }
-
 // Função para redimensionar imagem
 function redimensionarImagem(arquivo, larguraMaxima, callback) {
     const leitor = new FileReader();
@@ -289,5 +303,62 @@ if (formSenha) {
             mensagemSenha.textContent = 'Erro: faça login novamente antes de alterar a senha.';
             mensagemSenha.style.color = '#dc3545';
         });
+    });
+}
+
+/* ========== LIXEIRA ========== */
+
+const gridLixeira = document.getElementById('grid-lixeira');
+
+function carregarLixeira() {
+    db.collection('lixeira').get().then(function(snapshot) {
+        gridLixeira.innerHTML = '';
+        
+        snapshot.forEach(function(doc) {
+            const foto = doc.data();
+            const div = document.createElement('div');
+            div.classList.add('foto-item');
+            div.style.opacity = '0.6';
+            div.innerHTML = `
+                <img src="${foto.url}" alt="${foto.descricao}">
+                <button class="btn-restaurar" data-id="${doc.id}" style="position: absolute; top: 5px; left: 5px; background: #28a745; color: #fff; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-size: 0.8rem;">↩</button>
+                <button class="btn-remover-permanente" data-id="${doc.id}" style="position: absolute; top: 5px; right: 5px; background: #dc3545; color: #fff; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-size: 0.8rem;">✕</button>
+            `;
+            gridLixeira.appendChild(div);
+        });
+        
+        // Restaurar
+        document.querySelectorAll('.btn-restaurar').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                const id = this.getAttribute('data-id');
+                restaurarFoto(id);
+            });
+        });
+        
+        // Remover permanente
+        document.querySelectorAll('.btn-remover-permanente').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                const id = this.getAttribute('data-id');
+                db.collection('lixeira').doc(id).delete().then(function() {
+                    carregarLixeira();
+                });
+            });
+        });
+    });
+}
+
+function restaurarFoto(id) {
+    db.collection('lixeira').doc(id).get().then(function(doc) {
+        if (doc.exists) {
+            const foto = doc.data();
+            delete foto.excluidaEm;
+            
+            db.collection('fotos').add(foto).then(function() {
+                db.collection('lixeira').doc(id).delete().then(function() {
+                    carregarFotos();
+                    carregarLixeira();
+                });
+            });
+        }
     });
 }
