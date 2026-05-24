@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Controle</title>
+    <link rel="stylesheet" href="css/painel.css">
+</head>
+<body>
+    
+    <header class="painel-header">
+        <h1>Painel de Controle</h1>
+        <button id="btn-sair" class="btn-sair">Sair</button>
+    </header>
+
+    <main class="painel-main">
+        
+        <!-- Abas -->
+        <div class="abas">
+            <button class="aba ativa" data-aba="fotos">📷 Fotos</button>
+            <button class="aba" data-aba="textos">📝 Textos</button>
+            <button class="aba" data-aba="videos">🎬 Vídeos</button>
+            <button class="aba" data-aba="senha">🔒 Senha</button>
+        </div>
+
+        <!-- Aba Fotos -->
+        <section id="aba-fotos" class="conteudo-aba ativo">
+            <h2>Gerenciar Fotos do Portfólio</h2>
+            
+            <div class="upload-area">
+                <h3>Adicionar nova foto</h3>
+                <form class="form-foto">
+                    <div class="campo">
+                        <label for="imagem">Selecionar imagem</label>
+                        <input type="file" id="imagem" accept="image/*" required>
+                    </div>
+                    <div class="campo">
+                        <label for="descricao">Descrição da foto</label>
+                        <input type="text" id="descricao" placeholder="Ex: Noivo e noiva ao pôr do sol" required>
+                    </div>
+                    <button type="submit" class="btn">Adicionar Foto</button>
+                </form>
+            </div>
+            
+            <div class="lista-fotos">
+                <h3>Fotos atuais</h3>
+                <div class="grid-fotos" id="grid-fotos"></div>
+            </div>
+        </section>
+
+        <!-- Aba Textos -->
+        <section id="aba-textos" class="conteudo-aba">
+            <h2>Editar Textos do Site</h2>
+            
+            <form class="form-textos">
+                <div class="campo">
+                    <label for="texto-hero-titulo">Título da Home</label>
+                    <input type="text" id="texto-hero-titulo">
+                </div>
+                <div class="campo">
+                    <label for="texto-hero-paragrafo">Frase da Home</label>
+                    <input type="text" id="texto-hero-paragrafo">
+                </div>
+                <div class="campo">
+                    <label for="texto-sobre">Texto Sobre Mim</label>
+                    <textarea id="texto-sobre" rows="6"></textarea>
+                </div>
+                <div class="campo">
+                    <label for="texto-email">E-mail de contato</label>
+                    <input type="text" id="texto-email">
+                </div>
+                <div class="campo">
+                    <label for="texto-telefone">Telefone</label>
+                    <input type="text" id="texto-telefone">
+                </div>
+                <div class="campo">
+                    <label for="texto-instagram">Instagram</label>
+                    <input type="text" id="texto-instagram">
+                </div>
+                <button type="submit" class="btn">Salvar Textos</button>
+            </form>
+        </section>
+
+        <!-- Aba Vídeos -->
+        <section id="aba-videos" class="conteudo-aba">
+            <h2>Gerenciar Vídeos</h2>
+            <p>Adicione links de vídeos do YouTube ou Vimeo.</p>
+            
+            <form class="form-video">
+                <div class="campo">
+                    <label for="video-url">Link do vídeo (YouTube/Vimeo)</label>
+                    <input type="url" id="video-url" placeholder="https://www.youtube.com/watch?v=..." required>
+                </div>
+                <div class="campo">
+                    <label for="video-titulo">Título do vídeo</label>
+                    <input type="text" id="video-titulo" placeholder="Ex: Making of casamento" required>
+                </div>
+                <button type="submit" class="btn">Adicionar Vídeo</button>
+            </form>
+            
+            <div class="lista-videos" id="lista-videos"></div>
+        </section>
+
+        <!-- Aba Senha -->
+        <section id="aba-senha" class="conteudo-aba">
+            <h2>Alterar Senha</h2>
+            
+            <form class="form-senha">
+                <div class="campo">
+                    <label for="senha-nova">Nova Senha</label>
+                    <input type="password" id="senha-nova" placeholder="Digite a nova senha" required minlength="6">
+                </div>
+                <div class="campo">
+                    <label for="senha-confirmar">Confirmar Nova Senha</label>
+                    <input type="password" id="senha-confirmar" placeholder="Confirme a nova senha" required>
+                </div>
+                <button type="submit" class="btn">Alterar Senha</button>
+            </form>
+            
+            <div class="mensagem-senha" style="margin-top: 15px; font-size: 0.9rem;"></div>
+        </section>
+        
+    </main>
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="js/painel.js"></script>
+</body>
+</html>

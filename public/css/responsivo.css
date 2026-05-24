@@ -1,0 +1,84 @@
+/* ========== RESPONSIVO ========== */
+
+/* Tablet (até 768px) */
+@media (max-width: 768px) {
+
+    .hero h2 {
+        font-size: 2rem;
+    }
+
+    .hero p {
+        font-size: 1rem;
+    }
+
+    .galeria {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .sobre-conteudo {
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .contato-conteudo {
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .footer-conteudo {
+        flex-direction: column;
+        gap: 30px;
+        text-align: center;
+    }
+
+}
+
+/* Celular (até 480px) */
+@media (max-width: 480px) {
+
+    header .container {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    header nav ul {
+        gap: 15px;
+    }
+
+    .hero {
+        height: 70vh;
+    }
+
+    .hero h2 {
+        font-size: 1.6rem;
+    }
+
+    .galeria {
+        grid-template-columns: 1fr;
+    }
+
+    .foto img {
+        height: 250px;
+    }
+
+    /* Menu mobile */
+    .menu-toggle {
+        display: block;
+    }
+
+    nav {
+        display: none;
+        width: 100%;
+    }
+
+    nav.ativo {
+        display: block;
+    }
+
+    nav ul {
+        flex-direction: column;
+        gap: 15px;
+        padding-top: 15px;
+    }
+
+}

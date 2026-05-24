@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Declara que é um arquivo XML em UTF-8 (suporta acentos) -->
+
+<!-- SITEMAP DO SITE DVD - DAVID ALEXANDRE -->
+<!-- Enviar este arquivo no Google Search Console -->
+<!-- Conjunto de URLs do site -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">    
+
+    <!-- Página principal -->
+    <url>
+        <loc>https://dev-ale1.github.io/site-fotografo</loc>
+        <!-- URL da página -->
+
+        <lastmod>2026-05-22</lastmod>
+        <!-- Última modificação: ajuda o Google a saber se precisa reindexar -->
+
+        <changefreq>monthly</changefreq>
+        <!-- Frequência de mudança: monthly = mensal -->
+
+        <priority>1.0</priority>
+        <!-- Prioridade de 0.0 a 1.0: 1.0 = mais importante -->
+    </url>
+
+</urlset>

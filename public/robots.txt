@@ -1,0 +1,15 @@
+# ========== ROBOTS.TXT ==========
+# Instruções para robôs de mecanismos de busca (Google, Bing, etc.)
+
+# Regras para todos os robôs
+User-agent: *
+
+# Bloquear páginas internas (não indexar no Google)
+Disallow: /admin.html
+Disallow: /painel.html
+
+# Permitir todo o resto do site
+Allow: /
+
+# Localização do mapa do site
+Sitemap: https://dev-ale1.github.io/site-fotografo/sitemap.xml
